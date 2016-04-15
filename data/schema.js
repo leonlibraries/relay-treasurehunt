@@ -1,9 +1,6 @@
 /**
- * ./data/schema.js
+ * Schema定义
  */
-
-/* ... */
-
 import {
     Game,
     HidingSpot,
@@ -25,13 +22,9 @@ import {
     connectionArgs
 } from 'graphql-relay/lib/connection/connection';
 
-import {
-    connectionFromArray,
-} from 'graphql-relay/lib/connection/arrayconnection';
+import connectionFromArray from 'graphql-relay/lib/connection/arrayconnection';
 
-import {
-    mutationWithClientMutationId
-} from 'graphql-relay/lib/mutation/mutation';
+import mutationWithClientMutationId from 'graphql-relay/lib/mutation/mutation';
 
 import {
     GraphQLObjectType,
@@ -44,11 +37,14 @@ import {
     GraphQLID
 } from 'graphql/type/scalars';
 
-import {
-    GraphQLSchema
-} from 'graphql/type/schema';
+import GraphQLSchema from 'graphql/type/schema';
 
 
+/**
+ * 配置NodeInterface 和 NodeField
+ * 我们需要为Relay提供一个从对象映射到与该对象关联的GraphQL对象的方式
+ * @type {*|{nodeInterface, nodeField}}
+ */
 var {nodeInterface, nodeField} = nodeDefinitions(
     (globalId) => {
         var {type, id} = fromGlobalId(globalId);
@@ -70,8 +66,12 @@ var {nodeInterface, nodeField} = nodeDefinitions(
         }
     }
 );
-/************************************/
 
+/***************** 美丽的分割线 *******************/
+
+/**
+ * 定义数据结构 GraphQLObjectType
+ */
 var gameType = new GraphQLObjectType({
     name: 'Game',
     description: 'A treasure search game',
@@ -117,24 +117,31 @@ var hidingSpotType = new GraphQLObjectType({
     interfaces: [nodeInterface],
 });
 
-/************************************/
+/***************** 美丽的分割线 *******************/
+
 var {connectionType: hidingSpotConnection} =
     connectionDefinitions({name: 'HidingSpot', nodeType: hidingSpotType});
 
 
-/************************************/
+/***************** 美丽的分割线 *******************/
+
+/**
+ * Query定义
+ */
 var queryType = new GraphQLObjectType({
     name: 'Query',
     fields: () => ({
         node: nodeField,
         game: {
             type: gameType,
-            resolve: () => getGame(),
+            resolve: () => getGame()
         },
     }),
 });
 
-/************************************/
+/***************** 美丽的分割线 *******************/
+
+
 var CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
     name: 'CheckHidingSpotForTreasure',
     inputFields: {
@@ -157,8 +164,11 @@ var CheckHidingSpotForTreasureMutation = mutationWithClientMutationId({
     },
 });
 
-/************************************/
+/***************** 美丽的分割线 *******************/
 
+/**
+ * Mutation定义
+ */
 var mutationType = new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
@@ -166,7 +176,11 @@ var mutationType = new GraphQLObjectType({
     }),
 });
 
-/************************************/
+/***************** 美丽的分割线 *******************/
+
+/**
+ * 总体Schema定义
+ */
 export var Schema = new GraphQLSchema({
     query: queryType,
     mutation: mutationType

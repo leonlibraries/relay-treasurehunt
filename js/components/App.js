@@ -3,6 +3,9 @@ import Relay from 'react-relay';
 
 import CheckHidingSpotForTreasureMutation from '../mutations/CheckHidingSpotForTreasureMutation';
 
+/**
+ * React组件
+ */
 class App extends React.Component {
     _getHidingSpotStyle(hidingSpot) {
         var color;
@@ -30,6 +33,9 @@ class App extends React.Component {
         if (this._isGameOver()) {
             return;
         }
+        /**
+         * 增删改事件的处理方式是,绑定一个Mutation.js
+         */
         Relay.Store.commitUpdate(
             new CheckHidingSpotForTreasureMutation({
                 game: this.props.game,
@@ -77,6 +83,9 @@ class App extends React.Component {
     }
 }
 
+/**
+ * Relay容器包裹,相当于一个更高级别的组件
+ */
 export default Relay.createContainer(App, {
     fragments: {
         game: () => Relay.QL`
